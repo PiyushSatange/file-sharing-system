@@ -1,16 +1,30 @@
-import { useState } from 'react'
-import Login from './pages/login'
-import './App.css'
+import toast, { Toaster } from 'react-hot-toast';
+import Home from './pages/home';
+import Login from './pages/login';
+import Register from './pages/register';
+import ProtectedLogedInRoute from './Routes/logedInRoute';
+import Dashboard from './pages/dashboard';
+import { BrowserRouter, Route, Routes } from 'react-router';
 
-function App() {
-  const [count, setCount] = useState(0)
 
-  
 
+const App = () => {
   return (
-    <div>Home page</div>
-    
-  )
-}
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/dashboard" 
+        element={
+          <ProtectedLogedInRoute>
+            <Dashboard/>
+          </ProtectedLogedInRoute>
+        } 
+      />
+    </Routes>
+  </BrowserRouter>
+  );
+};
 
-export default App
+export default App;

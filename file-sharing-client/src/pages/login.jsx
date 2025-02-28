@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router";
+import toast, { Toaster } from "react-hot-toast";
 
 export function Login(){
     const [email, setEmail] = useState(null);
@@ -32,9 +33,12 @@ export function Login(){
             console.log(data);
             if(data.success == true){
                 console.log("inside success")
+                toast.success("login success");
                 navigate("/dashboard");
+                
             }
             else{
+                toast.error("login failed");
                 console.log("inside else")
             }
         })
@@ -46,6 +50,7 @@ export function Login(){
                 credentials: "include"
             }
         ).then(response => console.log(response));
+        toast('Here is your toast.');
     }
 
 
@@ -58,6 +63,7 @@ export function Login(){
             <button onClick={handleSubmit}>Submit</button>
             <NavLink to="/register">Create new account</NavLink>
             <button onClick={handleTest}>Test</button>
+            
         </div>
         )
     

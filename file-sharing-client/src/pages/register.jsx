@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router"
+import { fetchApi, makeAuthenticated } from "../Redux/Slice/authenticationSlice";
 
 export function Register(){
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const token = useSelector((state) => state.authentication.isAuthenticated);
+    const dispatch = useDispatch();
 
     function handleEmail(e){
         console.log(e.target.value);
@@ -18,14 +22,7 @@ export function Register(){
             email:email,
             password:password
         };
-        fetch("http://localhost:8000/api/auth/login",
-            {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json'},
-                body: JSON.stringify(payload),
-                credentials: "include"
-            }
-        ).then(response => console.log(response));
+        dispatch(fetchApi(payload));
     }
 
     function handleTest(){
@@ -40,6 +37,7 @@ export function Register(){
         <>
             <div>
                 <h3>Register Page</h3>
+                {token?"authenticated":"not authenticated"}
                 <input type="email" onChange={handleEmail} />
                 <input type="password" onChange={handlePassword} />
                 <button onClick={handleSubmit}>Submit</button>
