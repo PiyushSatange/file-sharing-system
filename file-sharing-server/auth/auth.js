@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const register = async (req, res) => {
     const {email, password} = req.body;
     if(password.length < 6){
-        return res.status(400).json({msg:"Password must be more than 6 characters"});
+        return res.status(400).json({success:false, msg:"Password must be more than 6 characters"});
     }
     
     try {
@@ -18,18 +18,19 @@ const register = async (req, res) => {
                 {id: user._id, email, role:user.role},
                 process.env.JWT_SECRET,
                 {
-                    expiresIn: 30
+                    expiresIn: 100
                 }
             );
             res.cookie("jwt", token, {
                 httpOnly: true
             });
-            return res.status(201).json({msg:"User created successfully", user});
-        }).catch(error => {
-            return res.status(400).json({msg:"User not created", err: error.message})
+            return res.status(201).json({success:true, msg:"User created successfully", user});
         });
     } catch (error) {
-        return res.status(400).json({msg:"something went wrong", error:error.message});
+        if (error.code === 11000) {  // 🔹 MongoDB duplicate email error
+            return res.status(409).json({ success: false, msg: "Email already exists" });
+        }
+        return res.status(500).json({ success: false, msg: "Something went wrong", error: error.message });
     }
     
 }
@@ -45,7 +46,7 @@ const login = async (req, res) => {
     console.log(email, password);
     const user = await User.findOne({email:email});
     if(!user){
-        return res.status(400).json({success:false, msg:"User not found"});
+        return res.status(404).json({success:false, msg:"User not found"});
     }
     else{
         const result = await bcryptjs.compare(password, user.password);
@@ -55,7 +56,7 @@ const login = async (req, res) => {
                 {id: user._id, email, role:user.role},
                 process.env.JWT_SECRET,
                 {
-                    expiresIn:30
+                    expiresIn:100
                 }
             );
             res.cookie("jwt", token, {
@@ -64,12 +65,28 @@ const login = async (req, res) => {
             return res.status(200).json({success:true, msg:"Login successful", user});
         }
         else{
-            return res.status(200).json({success:false, msg:"incorrect username or password"});
+            return res.status(401).json({success:false, msg:"incorrect username or password"});
         }
     }
 }
 
+const logout = async (req, res) => {
+    console.log("inside logout server");
+    if (!req.cookies.jwt) {
+        console.log(1);
+        return res.status(404).json({ success: false, msg: "No active session found" });
+    }
+
+    res.clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "Lax" // Use Lax if frontend & backend are on different domains
+    });
+    console.log("cooke cleared")    
+    res.status(200).json({ success: true, msg: "Logged out successfully"});
+}
+
 const isTokenValid = (req, res) => {
+    console.log("inside token valid function");
     const token = req.cookies.jwt;
     if(token){
         jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
@@ -82,9 +99,8 @@ const isTokenValid = (req, res) => {
           })
     }
     else{
-        return res.status(400).json({success:false, msg:"token not available"});
+        return res.status(404).json({success:false, msg:"token not available"});
     }
-
 }
 
 const giveAdminAccess = async(req, res) => {
@@ -131,5 +147,6 @@ module.exports = {
     login,
     giveAdminAccess,
     deleteUser,
-    isTokenValid
+    isTokenValid,
+    logout
 }

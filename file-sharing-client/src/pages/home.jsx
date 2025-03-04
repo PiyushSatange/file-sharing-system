@@ -1,5 +1,3 @@
-import ProtectedLogedInRoute from "../Routes/logedInRoute";
-
 const Home = () => {
     return(
         <>

@@ -1,5 +1,5 @@
 const express = require("express")
-const {register, login, giveAdminAccess, deleteUser, isTokenValid} = require("./auth");
+const {register, login, giveAdminAccess, deleteUser, isTokenValid, logout} = require("./auth");
 const { adminAuth } = require("../middlewares/auth");
 
 const authRouter = express.Router();
@@ -10,5 +10,6 @@ authRouter.route("/checkToken").get(isTokenValid);
 authRouter.route("/updateToAdmin").put(adminAuth, giveAdminAccess);
 authRouter.route("/delete").delete(adminAuth, deleteUser);
 authRouter.route("/test").get(adminAuth, (req, res)=>{res.send("working")});
+authRouter.route("/logout").get(logout);
 
 module.exports = {authRouter}
