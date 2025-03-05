@@ -3,7 +3,8 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
-    const {email, password} = req.body;
+    const {firstName, lastName, email, password} = req.body;
+    console.log(firstName, lastName, email, password)
     if(password.length < 6){
         return res.status(400).json({success:false, msg:"Password must be more than 6 characters"});
     }
@@ -11,11 +12,13 @@ const register = async (req, res) => {
     try {
         const hash = await bcryptjs.hash(password, 10);
         await User.create({
+            firstName,
+            lastName,
             email,
             password:hash
         }).then(user => {
             const token = jwt.sign(
-                {id: user._id, email, role:user.role},
+                {id: user._id, email, firstName, lastName, role:user.role},
                 process.env.JWT_SECRET,
                 {
                     expiresIn: 100
@@ -45,6 +48,7 @@ const login = async (req, res) => {
     }
     console.log(email, password);
     const user = await User.findOne({email:email});
+    console.log(user);
     if(!user){
         return res.status(404).json({success:false, msg:"User not found"});
     }
@@ -53,7 +57,7 @@ const login = async (req, res) => {
         console.log(result)
         if(result == true){
             const token = jwt.sign(
-                {id: user._id, email, role:user.role},
+                {id: user._id, email, firstName: user.firstName, lastName: user.lastName, role:user.role},
                 process.env.JWT_SECRET,
                 {
                     expiresIn:100

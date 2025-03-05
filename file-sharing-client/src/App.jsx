@@ -6,6 +6,9 @@ import Dashboard from "./pages/dashboard";
 import { BrowserRouter, Route, Routes } from "react-router";
 import ProtectFromUnauthenticatedUser from "./Routes/ProtectFromUnauthenticatedUser";
 import ProtectFromAuthenticatedUser from "./Routes/protectFromAuthenticatedUser";
+import Shared from "./pages/shared";
+import Transfer from "./pages/transfer";
+import Bin from "./pages/bin";
 
 const App = () => {
   return (
@@ -35,7 +38,13 @@ const App = () => {
               <Dashboard />
             </ProtectFromUnauthenticatedUser>
           }
-        />
+        >
+          <Route index element={<Home />} /> 
+          <Route path="files" element={'#'} />
+          <Route path="shared" element={<Shared />} />
+          <Route path="transfer" element={<Transfer />} />
+          <Route path="bin" element={<Bin />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

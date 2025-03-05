@@ -7,9 +7,18 @@ import { userRegisterThunk } from "../Redux/Slice/userAuthSlice";
 export function Register(){
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const [firstName, setFirstName] = useState(null);
+    const [lastName, setLastName] = useState(null);
     const {isAuthenticated, isLoading} = useSelector((state) => state.userAuth);
     const dispatch = useDispatch();
 
+
+    function handleFirstName(e){
+        setFirstName(e.target.value);
+    }
+    function handleLastName(e){
+        setLastName(e.target.value);
+    }
     function handleEmail(e){
         setEmail(e.target.value);
     }
@@ -18,6 +27,8 @@ export function Register(){
     }
     function handleSubmit(){
         const payload = {
+            firstName:firstName,
+            lastName:lastName,
             email:email,
             password:password
         };
@@ -29,6 +40,10 @@ export function Register(){
         <>
             <div>
                 <h3>Register Page</h3>
+                <label>First Name</label>
+                <input type="text" onChange={handleFirstName} />
+                <label>Last Name</label>
+                <input type="text" onChange={handleLastName} />
                 <input type="email" onChange={handleEmail} />
                 <input type="password" onChange={handlePassword} />
                 <button onClick={handleSubmit} disabled={isLoading}>Submit</button>
