@@ -9,6 +9,9 @@ import ProtectFromAuthenticatedUser from "./Routes/protectFromAuthenticatedUser"
 import Shared from "./pages/shared";
 import Transfer from "./pages/transfer";
 import Bin from "./pages/bin";
+import Starred from "./pages/starred";
+import Upload from "./pages/upload";
+import Profile from "./pages/profile";
 
 const App = () => {
   return (
@@ -39,11 +42,14 @@ const App = () => {
             </ProtectFromUnauthenticatedUser>
           }
         >
-          <Route index element={<Home />} /> 
-          <Route path="files" element={'#'} />
+          <Route index element={<Home />} />
+          <Route path="files" element={"#"} />
           <Route path="shared" element={<Shared />} />
+          <Route path="starred" element={<Starred />} />
+          <Route path="upload" element={<Upload />} />
           <Route path="transfer" element={<Transfer />} />
           <Route path="bin" element={<Bin />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>
