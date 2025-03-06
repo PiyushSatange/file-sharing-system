@@ -8,116 +8,51 @@ const SideBar = () => {
   );
   return (
     <>
-      <div className="bg-gray-800 bg-blend-darken h-screen flex flex-col justify-between">
-        <div className=" h-2/10 flex flex-col justify-center items-center">
-          <img src="../public/img/image.png" className="w-20" />
-          <h3 className="font-extrabold text-2xl text-green-700">ShareVault</h3>
+      <div className="bg-gray-900 text-white h-screen flex flex-col justify-between shadow-lg">
+        {/* Logo & Branding */}
+        <div className="flex flex-col items-center py-6">
+          <img src="../public/img/image.png" className="w-16 mb-2" alt="Logo" />
+          <h3 className="font-extrabold text-2xl text-lime-600 tracking-wide">
+            ShareVault
+          </h3>
         </div>
-        <div className=" h-8/10 ">
-          <ul className="h-full flex flex-col justify-evenly">
-            <li className="text-center">
-              <NavLink
-                to="/dashboard"
-                end
-                className={({ isActive }) =>
-                  `py-3 w-full block text-white hover:bg-gray-900 ${
-                    isActive ? "bg-gray-900 font-bold" : ""
-                  }`
-                }
-              >
-                Home
-              </NavLink>
-            </li>
-            <li className="text-center">
-              <NavLink
-                to="/dashboard/files"
-                className={({ isActive }) =>
-                  `py-3 w-full block text-white hover:bg-gray-900 ${
-                    isActive ? "bg-gray-900 font-bold" : ""
-                  }`
-                }
-              >
-                Files
-              </NavLink>
-            </li>
-            <li className=" text-center">
-              <NavLink
-                to="/dashboard/shared"
-                className={({ isActive }) =>
-                  `py-3 w-full block text-white hover:bg-gray-900 ${
-                    isActive ? "bg-gray-900 font-bold" : ""
-                  }`
-                }
-              >
-                Shared
-              </NavLink>
-            </li>
-            <li className=" text-center">
-              <NavLink
-                to="/dashboard/transfer"
-                className={({ isActive }) =>
-                  `py-3 w-full block text-white hover:bg-gray-900 ${
-                    isActive ? "bg-gray-900 font-bold" : ""
-                  }`
-                }
-              >
-                Transfer
-              </NavLink>
-            </li>
-            <li className=" text-center">
-              <NavLink
-                to="/dashboard/starred"
-                className={({ isActive }) =>
-                  `py-3 w-full block text-white hover:bg-gray-900 ${
-                    isActive ? "bg-gray-900 font-bold" : ""
-                  }`
-                }
-              >
-                Starred
-              </NavLink>
-            </li>
-            <li className=" text-center">
-              <NavLink
-                to="/dashboard/upload"
-                className={({ isActive }) =>
-                  `py-3 w-full block text-white hover:bg-gray-900 ${
-                    isActive ? "bg-gray-900 font-bold" : ""
-                  }`
-                }
-              >
-                Upload
-              </NavLink>
-            </li>
-            <li className=" text-center">
-              <NavLink
-                to="/dashboard/bin"
-                className={({ isActive }) =>
-                  `py-3 w-full block text-white hover:bg-gray-900 ${
-                    isActive ? "bg-gray-900 font-bold" : ""
-                  }`
-                }
-              >
-                Bin
-              </NavLink>
-            </li>
-            <li className=" text-center">
-              <NavLink
-                to="/dashboard/profile"
-                className={({ isActive }) =>
-                  `py-3 w-full block text-white hover:bg-gray-900 ${
-                    isActive ? "bg-gray-900 font-bold" : ""
-                  }`
-                }
-              >
-                Profile
-              </NavLink>
-            </li>
-            <li className=" text-center">
-              <p className="py-3 text-white hover:bg-gray-900">
-                <LogoutBtn />
-              </p>
-            </li>
+
+        {/* Navigation Links */}
+        <nav className="flex-1">
+          <ul className="flex flex-col gap-2">
+            {[
+              { to: "/dashboard", label: "Home", icon: "🏠" },
+              { to: "/dashboard/files", label: "Files", icon: "📁" },
+              { to: "/dashboard/shared", label: "Shared", icon: "🔗" },
+              { to: "/dashboard/transfer", label: "Transfer", icon: "📤" },
+              { to: "/dashboard/starred", label: "Starred", icon: "⭐" },
+              { to: "/dashboard/upload", label: "Upload", icon: "⬆️" },
+              { to: "/dashboard/bin", label: "Bin", icon: "🗑️" },
+              { to: "/dashboard/profile", label: "Profile", icon: "👤" },
+            ].map(({ to, label, icon }) => (
+              <li key={to} className="text-center">
+                <NavLink
+                  to={to}
+                  end
+                  className={({ isActive }) =>
+                    `py-3 flex items-center gap-3  w-full rounded-lg transition-all duration-300 pl-5    ${
+                      isActive ? "bg-lime-600 font-bold" : "hover:bg-gray-800"
+                    }`
+                  }
+                >
+                  <span className="text-lg">{icon}</span>
+                  <span className="hidden md:inline">{label}</span>
+                </NavLink>
+              </li>
+            ))}
           </ul>
+        </nav>
+
+        {/* Logout Button */}
+        <div className="text-center pb-4">
+          <button className="w-full py-3 bg-red-600 hover:bg-red-700 rounded-lg transition duration-300">
+            <LogoutBtn />
+          </button>
         </div>
       </div>
     </>
