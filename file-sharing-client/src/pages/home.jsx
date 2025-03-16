@@ -1,9 +1,11 @@
+import InstantShare from "./instantShare";
+
 const Home = () => {
-    return(
-        <>
-            <h1>Homepage</h1>
-        </>
-    )
-}
+  return (
+    <>
+      <InstantShare />
+    </>
+  );
+};
 
 export default Home;

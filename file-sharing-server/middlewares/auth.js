@@ -1,38 +1,25 @@
 const jwt = require("jsonwebtoken");
 
-const adminAuth = (req, res, next) => {
-    const token = req.cookies.jwt;
-    if(token){
-        const result = jwt.verify(token, process.env.JWT_SECRET);
-        if(result.role === "admin"){
-            next();
-        }
-        else{
-            return res.status(400).json({ message: "Not authorized" })
-        }
-    }
-    else{
-        res.status(400).json({msg:"token not found"});
-    }
-}
+const isTokenValid = (req, res, next) => {
+  console.log("inside token valid middleware");
+  const token = req.cookies.jwt;
+  console.log(token);
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
+      if (err) {
+        return res
+          .status(400)
+          .json({ success: false, msg: "session expired", error: err });
+      } else {
+        req.user = decoded;
 
-const basicAuth = (req, res, next) => {
-    const token = req.cookies.jwt;
-    if(token){
-        const result = jwt.verify(token, process.env.JWT_SECRET);
-        if(result.role === "basic"){
-            next();
-        }
-        else{
-            return res.status(400).json({ message: "Not authorized" })
-        }
-    }
-    else{
-        res.status(400).json({msg:"token not found"});
-    }
-}
+        console.log("sending it to controller", req.user);
+        next();
+      }
+    });
+  } else {
+    return res.status(404).json({ success: false, msg: "token not available" });
+  }
+};
 
-module.exports = {
-    adminAuth,
-    basicAuth
-}
+module.exports = { isTokenValid };

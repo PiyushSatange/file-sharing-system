@@ -9,6 +9,18 @@ export default function FileUpload() {
     setFile(selectedFile);
   };
 
+  const handleFileSend = async () => {
+    const formdata = new FormData();
+    formdata.append("file", file);
+    const response = await fetch("http://localhost:8000/file", {
+      body: formdata,
+      method: "POST",
+      credentials: "include",
+    });
+    const data = await response.json();
+    console.log(data);
+  };
+
   return (
     <div className="flex justify-center items-center">
       <div className="bg-lime-900 p-6 rounded-lg shadow-xl w-full flex flex-col gap-6 text-white">
@@ -19,7 +31,12 @@ export default function FileUpload() {
         <label className="border-2 border-dashed border-lime-500 bg-lime-800 hover:bg-lime-700 cursor-pointer p-6 rounded-lg flex flex-col justify-center items-center text-center transition duration-300">
           <Upload className="w-10 h-10 text-lime-400 mb-2" />
           <span className="text-lime-300">Drag & Drop or Click to Upload</span>
-          <input type="file" className="hidden" onChange={handleFileChange} />
+          <input
+            type="file"
+            className="hidden"
+            name="file"
+            onChange={handleFileChange}
+          />
         </label>
 
         {file && (
@@ -32,6 +49,7 @@ export default function FileUpload() {
         <button
           className="w-full bg-lime-600 text-white font-medium py-2 rounded-md hover:bg-lime-700 hover:cursor-pointer transition duration-300 disabled:opacity-50"
           disabled={!file}
+          onClick={handleFileSend}
         >
           Upload
         </button>

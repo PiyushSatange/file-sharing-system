@@ -50,9 +50,9 @@ const SideBar = () => {
 
         {/* Logout Button */}
         <div className="text-center pb-4">
-          <button className="w-full py-3 bg-red-600 hover:bg-red-700 rounded-lg transition duration-300">
+          <div className="w-full py-3 bg-red-600 hover:bg-red-700 rounded-lg transition duration-300">
             <LogoutBtn />
-          </button>
+          </div>
         </div>
       </div>
     </>

@@ -9,14 +9,27 @@ const fileSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  uploadDate: {
-    Timestamp: true,
+  fileSize: {
+    type: Number,
     required: true,
+  },
+  uploadDate: {
+    Timestamp: Date,
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
     required: true,
+  },
+  isStarred: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  isActive: {
+    type: Boolean,
+    required: true,
+    default: true,
   },
   sharedWith: [
     {
