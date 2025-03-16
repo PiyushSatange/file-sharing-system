@@ -37,6 +37,25 @@ const FileCard = ({ file }) => {
     }
     starFile();
   }
+  function handleUnstar() {
+    async function unstarFile() {
+      console.log(file);
+      const payload = {
+        fileId: file._id,
+      };
+      const response = fetch("http://localhost:8000/file/star", {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      console.log(data);
+    }
+    unstarFile();
+  }
 
   function handleArchive() {
     async function deleteFile() {
@@ -159,6 +178,14 @@ const FileCard = ({ file }) => {
                       onClick={handleStar}
                     >
                       Star
+                    </li>
+                  )}
+                  {file.isStarred && (
+                    <li
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={handleUnstar}
+                    >
+                      Unstar
                     </li>
                   )}
 

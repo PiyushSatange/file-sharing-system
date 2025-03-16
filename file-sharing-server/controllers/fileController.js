@@ -231,6 +231,50 @@ const getStarred = async (req, res) => {
   }
 };
 
+const removeStarred = async (req, res) => {
+  try {
+    const { fileId } = req.body;
+
+    // Validate input
+    if (!fileId) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "File ID is required" });
+    }
+
+    // Check if the file exists
+    const file = await File.findById(fileId);
+    if (!file) {
+      return res.status(404).json({ success: false, msg: "File not found" });
+    }
+
+    // Check if already starred
+    if (!file.isStarred) {
+      return res
+        .status(200)
+        .json({ success: true, msg: "File is already unstarred", data: file });
+    }
+
+    // Update the file
+    const updatedFile = await File.findByIdAndUpdate(
+      fileId,
+      { $set: { isStarred: false } },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      data: updatedFile,
+      msg: "File marked as unstarred",
+    });
+  } catch (error) {
+    console.error("Error marking file as unstarred:", error);
+    return res
+      .status(500)
+      .json({ success: false, msg: "Internal server error" });
+  }
+};
+
 module.exports = {
   addFile,
   getFilesByUserId,
@@ -240,4 +284,5 @@ module.exports = {
   getArchivedFilesByUserId,
   makeStarred,
   getStarred,
+  removeStarred,
 };

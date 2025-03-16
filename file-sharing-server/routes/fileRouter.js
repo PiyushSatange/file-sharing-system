@@ -8,6 +8,7 @@ const {
   getArchivedFilesByUserId,
   makeStarred,
   getStarred,
+  removeStarred,
 } = require("../controllers/fileController");
 const multer = require("multer");
 const { isTokenValid } = require("../middlewares/auth");
@@ -25,5 +26,6 @@ fileRouter.route("/").delete(isTokenValid, archiveFile);
 fileRouter.route("/archived").get(isTokenValid, getArchivedFilesByUserId);
 fileRouter.route("/star").put(isTokenValid, makeStarred);
 fileRouter.route("/star").get(isTokenValid, getStarred);
+fileRouter.route("/star").delete(isTokenValid, removeStarred);
 
 module.exports = { fileRouter };
